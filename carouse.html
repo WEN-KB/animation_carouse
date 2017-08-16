@@ -104,6 +104,7 @@
         }
     var timer=null;
     var btn_idx;
+    var content=getId("content");
     var prev=getId("left");
     var next=getId("right");
     var list=getId("img_list");
@@ -153,12 +154,21 @@
             }
         })(i);
     }
-
+    var timer1=null;
     timer=setInterval(function(){
         moving(-400,-800,true);
-    },1500)
-
-
+    },1000);
+    var cont=getId("content");
+    cont.onmouseover=function(){
+        clearInterval(timer1);
+        clearInterval(timer);
+    };
+     cont.onmouseout=function(){
+        clearInterval(timer1);
+        timer1=setInterval(function(){
+        moving(-400,-800,true);
+        },1000);
+            }
 
 </script>
 </html>
