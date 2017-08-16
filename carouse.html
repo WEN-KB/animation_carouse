@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>carouse</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        #content {
+            width: 400px;
+            height: 300px;
+            border: 1px solid black;
+            overflow: hidden;
+        }
+        img{
+            width: 400px;
+            height: 300px;
+        }
+        #img_list{
+            width: 1200px;
+            position: relative;
+            left:0;
+            font-size: 0;
+            transition: all .5s ease-in-out;
+        }
+        .change{
+            color: burlywood;
+            text-align: center;
+            line-height: 40px;
+            font-size: 25px;
+            display: block;
+            width: 40px;
+            height: 40px;
+            border: 1px solid red;
+            position: absolute;
+            background-color: black;
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        #left{
+            left: 10px;
+            top:135px;
+        }
+        #right {
+            left: 340px;
+            top: 135px;
+        }
+        #change{
+            width: 80px;
+            height: 20px;
+            border: 1px solid saddlebrown;
+            position: absolute;
+            top: 270px;
+            left:150px;
+        }
+        .change{
+        display: none}
+        #content:hover .change{
+            display: block;
+        }
+        span{
+            display: block;
+            width:10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color:white;
+            float: left;
+            margin-left: 10px;
+        }
+        .on{
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="content">
+        <div id="img_list">
+            <img src="images/img_1.jpg">
+            <img src="images/img_2.jpg">
+            <img src="images/img_3.jpg">
+        </div>
+        <div id="left" class="change">< </div>
+        <div id="right" class="change">> </div>
+        <div id="change">
+            <span class="on"></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</body>
+<script>
+    function getId(id){
+        return document.getElementById(id)?document.getElementById(id):null;
+    }
+        function getStyle(obj,attr){
+        if(document.all){
+        return parseInt(obj.currentStyle[attr]);
+        }else{
+        return parseInt(getComputedStyle(obj,false)[attr]);
+        }
+        }
+    var timer=null;
+    var btn_idx;
+    var prev=getId("left");
+    var next=getId("right");
+    var list=getId("img_list");
+    var buttons=document.getElementsByTagName("span");
+    function moving(speed,terminal,isLeft) {
+//            if(isLeft){
+//                isLeft=0;
+//            }else{
+//                isLeft=-800;
+//            }
+        isLeft = isLeft ? 0 : -800;
+        var left_val =parseInt(getComputedStyle(list).left);
+        if (left_val === terminal) {
+             left_val= isLeft;
+        } else {
+            left_val+= speed;
+        }
+          list.style.left=left_val+"px";
+
+
+        console.log(left_val+"px");
+        btn_idx=Math.ceil(Math.abs(left_val/(401)));
+        console.log(btn_idx);
+        for(var i=0;i<buttons.length;i++){
+        buttons[i].setAttribute("class","");
+        }
+        buttons[btn_idx].setAttribute("class","on");
+    }
+
+
+    next.addEventListener("click", function () {
+        moving(-400,-800,true);
+    }, true);
+    prev.addEventListener("click", function () {
+        moving(400,0,false);
+    }, true);
+
+
+    for(var i=0;i<buttons.length;i++){                    //闭包，贼重要，获得i的值。
+        (function(n){
+            buttons[i].onclick=function(){
+                list.style.left=n*(-400)+"px";
+                for(var i=0;i<buttons.length;i++){
+                    buttons[i].setAttribute("class","");
+                }
+                this.setAttribute("class","on");
+            }
+        })(i);
+    }
+
+    timer=setInterval(function(){
+        moving(-400,-800,true);
+    },1500)
+
+
+
+</script>
+</html>
